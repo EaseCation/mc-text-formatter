@@ -16,12 +16,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-
-    - id: Build-Deploy-Vue
-      uses: xRealNeon/VuePagesAction@1.0.1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
       with:
-        username: 'EaseCation'
-        reponame: 'mc-text-formater'
-        token: ${{ secrets.GITHUB_TOKEN }}
-        useyarn: true
-    
+        node-version: ${{ matrix.node-version }}
+    - name: Build
+      run: |
+        yarn
+        yarn build
+    - name: Setup Pages
+      uses: actions/configure-pages@v3
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v1
+      with:
+        # Upload dist repository
+        path: './dist'
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v1
