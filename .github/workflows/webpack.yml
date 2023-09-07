@@ -14,28 +14,13 @@ jobs:
       id-token: write
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-
     steps:
     - uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - id: Build-Deploy-Vue
+      uses: thefrustrateddev/vue-deploy-github-pages@v1.0.0
       with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Build
-      run: |
-        yarn
-        yarn build
-
-    - name: Upload GitHub Pages artifact
-      uses: actions/upload-pages-artifact@v2.0.0
-      with:
-        path: dist/
-        
-    - name: Deploy GitHub Pages site
-      uses: actions/deploy-pages@v1.2.9
+        username: 'EaseCation'
+        reponame: 'mc-text-formater'
+        token: ${{ secrets.GITHUB_TOKEN }}
     
