@@ -49,6 +49,15 @@ export default {
         isDarkMode: true
     };
   },
+  mounted() {
+      // 当页面加载时，尝试从localStorage中获取数据
+      this.rawText = localStorage.getItem('userRawText') || '';
+      this.isDarkMode = JSON.parse(localStorage.getItem('isDarkMode')) || false;
+
+      if(this.rawText) {
+          this.formatText();
+      }
+  },
   methods: {
         toggleDarkMode() {
             
