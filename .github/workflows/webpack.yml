@@ -32,12 +32,8 @@ jobs:
     - name: Upload GitHub Pages artifact
       uses: actions/upload-pages-artifact@v2.0.0
       with:
-        name: mc-text-formatter
         path: dist/
         
     - name: Deploy GitHub Pages site
       uses: actions/deploy-pages@v1.2.9
-      with:
-        # Name of the artifact to deploy
-        artifact_name: mc-text-formatter
     
