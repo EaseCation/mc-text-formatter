@@ -13,54 +13,62 @@
 
 <script>
 export default {
-  data() {
-    return {
-        colors: {
-            "§0": "#000000",
-            "§1": "#0000AA",
-            "§2": "#00AA00",
-            "§3": "#00AAAA",
-            "§4": "#AA0000",
-            "§5": "#AA00AA",
-            "§6": "#FFAA00",
-            "§7": "#AAAAAA",
-            "§8": "#555555",
-            "§9": "#5555FF",
-            "§a": "#55FF55",
-            "§b": "#55FFFF",
-            "§c": "#FF5555",
-            "§d": "#FF55FF",
-            "§e": "#FFFF55",
-            "§f": "#FFFFFF",
-            "§g": "#DDD605",
-            "§h": "#E3D4D1",
-            "§i": "#CECACA",
-            "§j": "#443A3B",
-            "§m": "#971607",
-            "§n": "#B4684D",
-            "§p": "#DEB12D",
-            "§q": "#11A036",
-            "§s": "#2CBAA8",
-            "§t": "#21497B",
-            "§u": "#9A5CC6"
-        },
-        rawText: '',
-        formattedText: '',
-        isDarkMode: true
-    };
-  },
-  mounted() {
-      // 当页面加载时，尝试从localStorage中获取数据
-      this.rawText = localStorage.getItem('userRawText') || '';
-      this.isDarkMode = JSON.parse(localStorage.getItem('isDarkMode')) || false;
+    data() {
+        return {
+            colors: {
+                "§0": "#000000",
+                "§1": "#0000AA",
+                "§2": "#00AA00",
+                "§3": "#00AAAA",
+                "§4": "#AA0000",
+                "§5": "#AA00AA",
+                "§6": "#FFAA00",
+                "§7": "#AAAAAA",
+                "§8": "#555555",
+                "§9": "#5555FF",
+                "§a": "#55FF55",
+                "§b": "#55FFFF",
+                "§c": "#FF5555",
+                "§d": "#FF55FF",
+                "§e": "#FFFF55",
+                "§f": "#FFFFFF",
+                "§g": "#DDD605",
+                "§h": "#E3D4D1",
+                "§i": "#CECACA",
+                "§j": "#443A3B",
+                "§m": "#971607",
+                "§n": "#B4684D",
+                "§p": "#DEB12D",
+                "§q": "#11A036",
+                "§s": "#2CBAA8",
+                "§t": "#21497B",
+                "§u": "#9A5CC6"
+            },
+            rawText: '',
+            formattedText: '',
+            isDarkMode: true
+        };
+    },
+    mounted() {
+        // 当页面加载时，尝试从localStorage中获取数据
+        this.rawText = localStorage.getItem('userRawText') || '';
+        this.isDarkMode = JSON.parse(localStorage.getItem('isDarkMode')) || false;
 
-      if(this.rawText) {
-          this.formatText();
-      }
+        if(this.rawText) {
+            this.formatText();
+        }
+    },
+    watch: {
+        rawText(newText) {
+            localStorage.setItem('userRawText', newText);
+        },
+        isDarkMode(newMode) {
+            localStorage.setItem('isDarkMode', JSON.stringify(newMode));
+        }
   },
   methods: {
         toggleDarkMode() {
-            
+            // this.isDarkMode = !this.isDarkMode;
         },
         formatText() {
             let formatted = this.rawText;
