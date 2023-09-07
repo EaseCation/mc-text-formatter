@@ -18,9 +18,10 @@ jobs:
     - uses: actions/checkout@v3
 
     - id: Build-Deploy-Vue
-      uses: thefrustrateddev/vue-deploy-github-pages@v1.0.0
+      uses: xRealNeon/VuePagesAction@1.0.1
       with:
         username: 'EaseCation'
         reponame: 'mc-text-formater'
         token: ${{ secrets.GITHUB_TOKEN }}
+        useyarn: true
     
