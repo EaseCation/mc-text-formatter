@@ -1,6 +1,20 @@
 <template>
     <div class="wrapper">
-        <textarea v-model="rawText" @input="formatText"></textarea>
+        <textarea v-model="rawText" @input="formatText" ref="textarea"></textarea>
+        <div>
+            <FormatButton
+                    v-for="(color, format) in colors"
+                    v-bind:format="format"
+                    v-bind:color="color"
+                    v-bind:key="color"
+                    @format="insertFormat"
+                >
+                {{ format }}
+            </FormatButton>
+            <FormatButton v-bind:format="'§l'" v-bind:color="'#FFFFFF'" v-bind:bold="true" @format="insertFormat">粗§l</FormatButton>
+            <FormatButton v-bind:format="'§o'" v-bind:color="'#FFFFFF'" v-bind:italic="true" @format="insertFormat">斜§o</FormatButton>
+            <FormatButton v-bind:format="'§r'" v-bind:color="'#FFFFFF'" @format="insertFormat">复原§r</FormatButton>
+        </div>
         <div :class="['output', { 'dark-mode': isDarkMode }]" v-html="formattedText"></div>
     </div>
     <div class="wrapper-bottom">
@@ -12,6 +26,8 @@
 </template>
 
 <script>
+import FormatButton from './FormatButton.vue';
+
 export default {
     data() {
         return {
@@ -53,8 +69,7 @@ export default {
         // 当页面加载时，尝试从localStorage中获取数据
         this.rawText = localStorage.getItem('userRawText') || '';
         this.isDarkMode = JSON.parse(localStorage.getItem('isDarkMode')) || false;
-
-        if(this.rawText) {
+        if (this.rawText) {
             this.formatText();
         }
     },
@@ -65,45 +80,55 @@ export default {
         isDarkMode(newMode) {
             localStorage.setItem('isDarkMode', JSON.stringify(newMode));
         }
-  },
-  methods: {
+    },
+    methods: {
+        insertFormat(format) {
+            // 获取当前光标位置
+            const start = this.$refs.textarea.selectionStart;
+            const end = this.$refs.textarea.selectionEnd;
+
+            // 插入格式代码
+            this.rawText = this.rawText.substring(0, start) + format + this.rawText.substring(end);
+
+            // 重新设置光标位置
+            this.$nextTick(() => {
+                this.$refs.textarea.focus();
+                this.$refs.textarea.setSelectionRange(start + format.length, start + format.length);
+            });
+            this.formatText();
+        },
         toggleDarkMode() {
             // this.isDarkMode = !this.isDarkMode;
         },
         formatText() {
             let formatted = this.rawText;
-            
             // 遍历颜色代码
             for (let code in this.colors) {
                 const regex = new RegExp(`${code}(.*?)(?=(§[0-9a-u]|\n|$))`, "g");
                 formatted = formatted.replace(regex, (match, content) => {
-                return `<span style="color: ${this.colors[code]}">${content}</span>`;
+                    return `<span style="color: ${this.colors[code]}">${content}</span>`;
                 });
             }
-            
             // 加粗处理
             const boldRegex = /§l(.*?)(?=(§[0-9a-u]|§r|\n|$))/g;
             formatted = formatted.replace(boldRegex, (match, content) => {
                 return `<strong>${content}</strong>`;
             });
-
             // 斜体处理
             const italicRegex = /§o(.*?)(?=(§[0-9a-u]|§r|\n|$))/g;
             formatted = formatted.replace(italicRegex, (match, content) => {
                 return `<em>${content}</em>`;
             });
-
             // 复原未格式化的部分
             const resetRegex = /§r/g;
             formatted = formatted.replace(resetRegex, '');
-
             // 处理换行
             const newlineRegex = /\n/g;
             formatted = formatted.replace(newlineRegex, '<br>');
-
             this.formattedText = formatted;
         }
-    }
+    },
+    components: { FormatButton }
 };
 </script>
 
@@ -188,6 +213,7 @@ button:hover {
 @media (prefers-color-scheme: dark) {
   body {
     color: #fff;
+    background-color: #222;
   }
   
   .wrapper {
@@ -204,7 +230,7 @@ button:hover {
 /* 手机适配 */
 @media (max-width: 768px) {
   .wrapper {
-    margin: 20px;
+    margin: 4px;
   }
 }
 
