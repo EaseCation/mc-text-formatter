@@ -177,11 +177,12 @@ export default {
 <style>
 
 body {
-  font-family: 
-    -apple-system, BlinkMacSystemFont, /* MacOS & iOS 系统字体 */
-    "Segoe UI", /* Windows 系统字体 */
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, /* 中文字体 */
-    sans-serif; /* 通用备选字体 */
+    background-color: #FAFAFA;
+    font-family: 
+        -apple-system, BlinkMacSystemFont, /* MacOS & iOS 系统字体 */
+        "Segoe UI", /* Windows 系统字体 */
+        "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, /* 中文字体 */
+        sans-serif; /* 通用备选字体 */
 }
 
 /* 默认样式 */
