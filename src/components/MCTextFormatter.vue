@@ -11,9 +11,9 @@
                 >
                 {{ format }}
             </FormatButton>
-            <FormatButton v-bind:format="'§l'" v-bind:color="'#FFFFFF'" v-bind:bold="true" @format="insertFormat">粗§l</FormatButton>
-            <FormatButton v-bind:format="'§o'" v-bind:color="'#FFFFFF'" v-bind:italic="true" @format="insertFormat">斜§o</FormatButton>
-            <FormatButton v-bind:format="'§r'" v-bind:color="'#FFFFFF'" @format="insertFormat">复原§r</FormatButton>
+            <FormatButton v-bind:format="'§l'" v-bind:color="'#F3F3F3'" v-bind:bold="true" @format="insertFormat">粗§l</FormatButton>
+            <FormatButton v-bind:format="'§o'" v-bind:color="'#F3F3F3'" v-bind:italic="true" @format="insertFormat">斜§o</FormatButton>
+            <FormatButton v-bind:format="'§r'" v-bind:color="'#F3F3F3'" @format="insertFormat">复原§r</FormatButton>
         </div>
         <div :class="['output', { 'dark-mode': isDarkMode }]" v-html="formattedText"></div>
     </div>
@@ -60,6 +60,29 @@ export default {
                 "§t": "#21497B",
                 "§u": "#9A5CC6"
             },
+            colorsBrace: {
+                "{black}": "§0",
+                "{dark-blue}": "§1",
+                "{dark-green}": "§2",
+                "{dark-aqua}": "§3",
+                "{dark-red}": "§4",
+                "{dark-purple}": "§5",
+                "{gold}": "§6",
+                "{gray}": "§7",
+                "{dark-gray}": "§8",
+                "{blue}": "§9",
+                "{green}": "§a",
+                "{aqua}": "§b",
+                "{red}": "§c",
+                "{light-purple}": "§d",
+                "{pink}": "§d",
+                "{yellow}": "§e",
+                "{white}": "§f",
+                "{reset}": "§r",
+                "{bold}": "§l",
+                "{italic}": "§o",
+                "{enter}": "\n"
+            },
             rawText: '',
             formattedText: '',
             isDarkMode: true
@@ -102,6 +125,21 @@ export default {
         },
         formatText() {
             let formatted = this.rawText;
+            // 首先转换 colorsBrace 中的字符
+            for (let braceCode in this.colorsBrace) {
+                const replacement = this.colorsBrace[braceCode];
+                const regex = new RegExp(braceCode.replace(/([^\w\s])/g, '\\$1'), "g");
+                formatted = formatted.replace(regex, replacement);
+            }
+
+            // 加粗处理
+            const boldRegex = /§l(.*?)(?=(§[0-9a-u]|§r|\n|$))/g;
+            formatted = formatted.replace(boldRegex, `<strong>$1</strong>`);
+
+            // 斜体处理
+            const italicRegex = /§o(.*?)(?=(§[0-9a-u]|§r|\n|$))/g;
+            formatted = formatted.replace(italicRegex, `<em>$1</em>`);
+
             // 遍历颜色代码
             for (let code in this.colors) {
                 const regex = new RegExp(`${code}(.*?)(?=(§[0-9a-u]|\n|$))`, "g");
@@ -109,24 +147,17 @@ export default {
                     return `<span style="color: ${this.colors[code]}">${content}</span>`;
                 });
             }
-            // 加粗处理
-            const boldRegex = /§l(.*?)(?=(§[0-9a-u]|§r|\n|$))/g;
-            formatted = formatted.replace(boldRegex, (match, content) => {
-                return `<strong>${content}</strong>`;
-            });
-            // 斜体处理
-            const italicRegex = /§o(.*?)(?=(§[0-9a-u]|§r|\n|$))/g;
-            formatted = formatted.replace(italicRegex, (match, content) => {
-                return `<em>${content}</em>`;
-            });
+
             // 复原未格式化的部分
             const resetRegex = /§r/g;
             formatted = formatted.replace(resetRegex, '');
+
             // 处理换行
             const newlineRegex = /\n/g;
             formatted = formatted.replace(newlineRegex, '<br>');
             this.formattedText = formatted;
         }
+
     },
     components: { FormatButton }
 };
