@@ -55,6 +55,7 @@ export default {
     color: white;
     margin: 6px 6px 0 0;
     font-size: 14px;
+    line-height: 20px;
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); 
     transition: all 0.2s;  
     min-width: 40px;

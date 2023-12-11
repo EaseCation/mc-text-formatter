@@ -19,6 +19,9 @@
             <format-button v-if="braceMode" v-bind:format="'{bold}'" v-bind:bold="true" @format="insertFormat">粗{bold}</format-button>
             <format-button v-if="braceMode" v-bind:format="'{italic}'" v-bind:italic="true" @format="insertFormat">斜{italic}</format-button>
             <format-button v-if="braceMode" v-bind:format="'{reset}'" @format="insertFormat">复原{reset}</format-button>
+            <div v-if="extraMode">
+                <format-button v-for="char in extraChars" v-bind:key="char" v-bind:format="char" @format="insertFormat">{{ char }}</format-button>
+            </div>
         </div>
         <div :class="['output', { 'dark-mode': isDarkMode }]" v-html="formattedText"></div>
     </div>
@@ -31,6 +34,10 @@
             <label class="small-gray-text">
                 <input type="checkbox" v-model="braceMode">
                 大括号模式
+            </label>
+            <label class="small-gray-text">
+                <input type="checkbox" v-model="extraMode">
+                特殊字符
             </label>
         </div>
         <div class="github-link">
@@ -52,7 +59,8 @@ export default {
 
     setup() {
 
-        const braceMode = ref(false)
+        const braceMode = ref(false);
+        const extraMode = ref(false);
 
         const colorsFormats = computed(() => {
             if (braceMode.value) {
@@ -161,6 +169,29 @@ export default {
             "{enter}": "\n"
         });
 
+        const extraChars = ref([
+            "༺",
+            "༻",
+            "❀",
+            "༽",
+            "༼",
+            "༒",
+            "■",
+            "ꕥ",
+            "»",
+            "«",
+            "୧",
+            "૭",
+            "✧",
+            "◎",
+            "★",
+            "✡",
+            "✩",
+            "❅",
+            "࿈",
+            "ʚ"
+        ])
+
         const rawText = ref(localStorage.getItem('userRawText') || '');
         const formattedText = ref('');
         const isDarkMode = ref(JSON.parse(localStorage.getItem('isDarkMode')) || true);
@@ -182,13 +213,16 @@ export default {
 
         const insertFormat = (format) => {
             const start = textarea.value.selectionStart;
-            const end = textarea.value.selectionEnd;
+            // const end = textarea.value.selectionEnd;
 
-            rawText.value = rawText.value.substring(0, start) + format + rawText.value.substring(end);
+            rawText.value = rawText.value.substring(0, start) + format + rawText.value.substring(start);
 
             formatText();
             textarea.value.focus();
-            textarea.value.setSelectionRange(start + format.length, start + format.length);
+            // 延迟设置才能成功
+            setTimeout(() => {
+                textarea.value.setSelectionRange(start + format.length, start + format.length);
+            }, 0);
         };
 
         const toggleDarkMode = () => {
@@ -232,16 +266,18 @@ export default {
 
         return {
             braceMode,
+            extraMode,
             colorsFormats,
             colors,
             colorsBrace,
+            extraChars,
             rawText,
             formattedText,
             isDarkMode,
             insertFormat,
             toggleDarkMode,
             formatText,
-            textarea
+            textarea,
         };
 
     }
