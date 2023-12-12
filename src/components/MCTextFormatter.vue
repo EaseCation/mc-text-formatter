@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <textarea v-model="rawText" @input="formatText" ref="textarea"></textarea>
+        <textarea v-model="rawText" @input="formatText" :placeholder="$t('placeholder.input')" ref="textarea"></textarea>
         <div>
             <format-button
                 v-for="(color, format) in colorsFormats"
@@ -11,45 +11,51 @@
             >
                 {{ format }}
             </format-button>
-            <format-button v-if="!braceMode" v-bind:format="'§l'" v-bind:bold="true" @format="insertFormat">粗§l
+            <format-button v-if="!braceMode" v-bind:format="'§l'" v-bind:bold="true" @format="insertFormat">
+                {{ $t('format.bold') }}§l
             </format-button>
-            <format-button v-if="!braceMode" v-bind:format="'§o'" v-bind:italic="true" @format="insertFormat">斜§o
+            <format-button v-if="!braceMode" v-bind:format="'§o'" v-bind:italic="true" @format="insertFormat">
+                {{ $t('format.italic') }}§o
             </format-button>
             <format-button v-if="!braceMode" v-bind:format="'§n'" v-bind:underline="true" @format="insertFormat">
-                下划线§n
+                {{ $t('format.underline') }}§n
             </format-button>
             <format-button v-if="!braceMode" v-bind:format="'§m'" v-bind:strikethrough="true" @format="insertFormat">
-                删除线§m
+                {{ $t('format.strikethrough') }}§m
             </format-button>
-            <format-button v-if="!braceMode" v-bind:format="'§r'" @format="insertFormat">复原§r</format-button>
+            <format-button v-if="!braceMode" v-bind:format="'§r'" @format="insertFormat">
+                {{ $t('format.reset') }}§r
+            </format-button>
             <format-button v-if="braceMode" v-bind:format="'{bold}'" v-bind:bold="true" @format="insertFormat">
-                粗{bold}
+                {{ $t('format.bold') }}{bold}
             </format-button>
             <format-button v-if="braceMode" v-bind:format="'{italic}'" v-bind:italic="true" @format="insertFormat">
-                斜{italic}
+                {{ $t('format.italic') }}{italic}
             </format-button>
-            <format-button v-if="braceMode" v-bind:format="'{reset}'" @format="insertFormat">复原{reset}</format-button>
+            <format-button v-if="braceMode" v-bind:format="'{reset}'" @format="insertFormat">
+                {{ $t('format.reset') }}{reset}
+            </format-button>
             <div v-if="extraMode">
                 <format-button v-for="char in extraChars" v-bind:key="char" v-bind:format="char" @format="insertFormat">
                     {{ char }}
                 </format-button>
             </div>
         </div>
-        <div :class="['output', { 'dark-mode': isDarkMode }]" v-html="formattedText"></div>
+        <div :class="['output', { 'dark-mode': isDarkMode }, { 'placeholder': !formattedText }]" v-html="formattedText ? formattedText : $t('placeholder.output')"></div>
     </div>
     <div class="wrapper-bottom">
         <div class="settings">
             <label class="small-gray-text label-checkbox">
                 <input type="checkbox" v-model="isDarkMode" @change="toggleDarkMode">
-                <span class="label-checkbox-text">暗色背景</span>
+                <span class="label-checkbox-text">{{ $t('setting.dark') }}</span>
             </label>
             <label class="small-gray-text label-checkbox">
                 <input type="checkbox" v-model="braceMode">
-                <span class="label-checkbox-text">大括号模式</span>
+                <span class="label-checkbox-text">{{ $t('setting.brace') }}</span>
             </label>
             <label class="small-gray-text label-checkbox">
                 <input type="checkbox" v-model="extraMode">
-                <span class="label-checkbox-text">特殊字符</span>
+                <span class="label-checkbox-text">{{ $t('setting.extra') }}</span>
             </label>
         </div>
         <div class="github-link">
@@ -365,6 +371,14 @@ textarea {
     background-color: #333;
     color: #fff;
     border-color: #666;
+}
+
+.placeholder {
+    color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.output.dark-mode.placeholder {
+    color: rgba(255, 255, 255, 0.2) !important;
 }
 
 button {
