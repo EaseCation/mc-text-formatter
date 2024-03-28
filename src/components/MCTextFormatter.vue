@@ -251,6 +251,8 @@ export default {
             // this.isDarkMode = !this.isDarkMode;
         };
 
+        const colorCodeSymbol = '§';
+
         const formatText = () => {
             let formatted = rawText.value;
             for (let braceCode in colorsBrace.value) {
@@ -266,47 +268,62 @@ export default {
                 underline: false,
                 strikethrough: false,
             };
+            let newState = { ...state };
             let output = "";
-            let i = 0;
+            let contentBuffer = "";
 
-            while (i < formatted.length) {
-                if (formatted[i] === '§') {
-                    i++; // 跳过 '§'
-                    let colorTag = '';
-                    switch (formatted[i]) {
-                        case 'r':
-                            state = { color: "", bold: false, italic: false, underline: false, strikethrough: false };
-                            break;
-                        case 'l':
-                            state.bold = true;
-                            break;
-                        case 'o':
-                            state.italic = true;
-                            break;
-                        case 'n':
-                            state.underline = true;
-                            break;
-                        case 'm':
-                            state.strikethrough = true;
-                            break;
-                        default:
-                            colorTag = `§${formatted[i]}`;
-                            state.color = colors.value[colorTag] || state.color;
-                            break;
-                    }
-                } else if (formatted[i] === '\n') {
-                    output += "<br>";
-                } else {
+            // 应用样式到缓冲内容，并重置缓冲
+            const applyStylesAndResetBuffer = () => {
+                if (contentBuffer) {
                     let spanStart = `<span style="color: ${state.color};`;
                     if (state.bold) spanStart += " font-weight: bold;";
                     if (state.italic) spanStart += " font-style: italic;";
                     if (state.underline) spanStart += " text-decoration: underline;";
                     if (state.strikethrough) spanStart += " text-decoration: line-through;";
                     spanStart += `">`;
-                    output += spanStart + formatted[i] + "</span>";
+                    output += spanStart + contentBuffer + "</span>";
+                    contentBuffer = ""; // 重置内容缓冲
                 }
-                i++;
+            };
+
+            for (let i = 0; i < rawText.value.length; i++) {
+                if (rawText.value[i] === '§') {
+                    i++; // 跳过 '§'
+                    switch (rawText.value[i]) {
+                        case 'r':
+                            newState = { color: "", bold: false, italic: false, underline: false, strikethrough: false };
+                            break;
+                        case 'l':
+                            newState.bold = true;
+                            break;
+                        case 'o':
+                            newState.italic = true;
+                            break;
+                        case 'n':
+                            newState.underline = true;
+                            break;
+                        case 'm':
+                            newState.strikethrough = true;
+                            break;
+                        default:
+                            newState.color = colors.value[`${colorCodeSymbol}${rawText.value[i]}`] || newState.color;
+                            break;
+                    }
+                } else if (rawText.value[i] === '\n') {
+                    applyStylesAndResetBuffer(); // 应用样式并清空缓冲
+                    output += "<br>";
+                } else {
+                    contentBuffer += rawText.value[i]; // 加入当前字符到缓冲
+                }
+
+                // 检查状态是否改变
+                if (JSON.stringify(state) !== JSON.stringify(newState)) {
+                    applyStylesAndResetBuffer(); // 应用当前样式并重置缓冲
+                    state = { ...newState }; // 更新当前状态为新状态
+                }
             }
+
+            applyStylesAndResetBuffer(); // 确保最后的缓冲内容被应用
 
             formattedText.value = output;
         };
