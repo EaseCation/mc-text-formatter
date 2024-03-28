@@ -259,31 +259,56 @@ export default {
                 formatted = formatted.replace(regex, replacement);
             }
 
-            const boldRegex = /§l(.*?)(?=§r|\n|$)/g;
-            formatted = formatted.replace(boldRegex, `<strong>$1</strong>`);
+            let state = {
+                color: "",
+                bold: false,
+                italic: false,
+                underline: false,
+                strikethrough: false,
+            };
+            let output = "";
+            let i = 0;
 
-            const underlineRegex = /§n(.*?)(?=§r|\n|$)/g;
-            formatted = formatted.replace(underlineRegex, `<u>$1</u>`);
-
-            const strikethroughRegex = /§m(.*?)(?=§r|\n|$)/g;
-            formatted = formatted.replace(strikethroughRegex, `<s>$1</s>`);
-
-            const italicRegex = /§o(.*?)(?=§r|\n|$)/g;
-            formatted = formatted.replace(italicRegex, `<em>$1</em>`);
-
-            for (let code in colors.value) {
-                const regex = new RegExp(`${code}(.*?)(?=(§[0-9a-u]|\n|$))`, "g");
-                formatted = formatted.replace(regex, (match, content) => {
-                    return `<span style="color: ${colors.value[code]}">${content}</span>`;
-                });
+            while (i < formatted.length) {
+                if (formatted[i] === '§') {
+                    i++; // 跳过 '§'
+                    let colorTag = '';
+                    switch (formatted[i]) {
+                        case 'r':
+                            state = { color: "", bold: false, italic: false, underline: false, strikethrough: false };
+                            break;
+                        case 'l':
+                            state.bold = true;
+                            break;
+                        case 'o':
+                            state.italic = true;
+                            break;
+                        case 'n':
+                            state.underline = true;
+                            break;
+                        case 'm':
+                            state.strikethrough = true;
+                            break;
+                        default:
+                            colorTag = `§${formatted[i]}`;
+                            state.color = colors.value[colorTag] || state.color;
+                            break;
+                    }
+                } else if (formatted[i] === '\n') {
+                    output += "<br>";
+                } else {
+                    let spanStart = `<span style="color: ${state.color};`;
+                    if (state.bold) spanStart += " font-weight: bold;";
+                    if (state.italic) spanStart += " font-style: italic;";
+                    if (state.underline) spanStart += " text-decoration: underline;";
+                    if (state.strikethrough) spanStart += " text-decoration: line-through;";
+                    spanStart += `">`;
+                    output += spanStart + formatted[i] + "</span>";
+                }
+                i++;
             }
 
-            const resetRegex = /§r/g;
-            formatted = formatted.replace(resetRegex, '');
-
-            const newlineRegex = /\n/g;
-            formatted = formatted.replace(newlineRegex, '<br>');
-            formattedText.value = formatted;
+            formattedText.value = output;
         };
 
         return {
