@@ -6,12 +6,20 @@ import {ref, watchEffect} from "vue";
             rawText: {
                 type: String,
                 required: true
+            },
+            copyWithN: {
+                type: Boolean,
+                default: true
             }
         },
         setup(props) {
             const copySuccess = ref(false);
             const onClick = () => {
-                navigator.clipboard.writeText(props.rawText.replaceAll("\n", "\\n"))
+                let text = props.rawText;
+                if (props.copyWithN) {
+                    text = props.rawText.replaceAll("\n", "\\n");
+                }
+                navigator.clipboard.writeText(text)
                     .then(() => {
                         copySuccess.value = true;
                     })

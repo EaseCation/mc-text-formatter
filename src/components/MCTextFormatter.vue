@@ -2,7 +2,7 @@
     <div class="wrapper">
         <div class="textarea-container">
             <textarea v-model="rawText" @input="formatText" :placeholder="$t('placeholder.input')" ref="textarea"></textarea>
-            <copy-button :raw-text="rawText" class="copy-button"></copy-button>
+            <copy-button :raw-text="rawText" :copy-with-n="copyWithN" class="copy-button"></copy-button>
         </div>
         <div>
             <format-button
@@ -60,6 +60,10 @@
                 <input type="checkbox" v-model="extraMode">
                 <span class="label-checkbox-text">{{ $t('setting.extra') }}</span>
             </label>
+            <label class="small-gray-text label-checkbox">
+                <input type="checkbox" v-model="copyWithN">
+                <span class="label-checkbox-text">{{ $t('setting.copyn') }}</span>
+            </label>
         </div>
         <div class="github-link">
             <a href="https://github.com/EaseCation/mc-text-formatter" target="_blank">
@@ -90,6 +94,7 @@ export default {
 
         const braceMode = ref(false);
         const extraMode = ref(false);
+        const copyWithN = ref(true);
 
         const colorsFormats = computed(() => {
             if (braceMode.value) {
@@ -338,6 +343,7 @@ export default {
         return {
             braceMode,
             extraMode,
+            copyWithN,
             colorsFormats,
             colors,
             colorsBrace,

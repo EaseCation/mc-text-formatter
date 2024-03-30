@@ -4,7 +4,7 @@ const messages = {
     en: {
         placeholder: {
             input: 'Input your text here, the preview will be shown below',
-            output: 'Formats preview here'
+            output: 'Preview here'
         },
         format: {
             bold: 'BOLD ',
@@ -16,7 +16,8 @@ const messages = {
         setting: {
             dark: 'Dark Mode',
             brace: 'Brace Mode',
-            extra: 'Extra Chars'
+            extra: 'Additional Chars',
+            copyn: 'Copy with \\n'
         }
     },
     'zh-cn': {
@@ -32,9 +33,10 @@ const messages = {
             reset: '复原'
         },
         setting: {
-            dark: '暗色模式',
+            dark: '暗色预览',
             brace: '大括号模式',
-            extra: '特殊字符'
+            extra: '特殊字符',
+            copyn: '复制时转换\\n'
         }
     },
     'zh-tw': {
@@ -50,9 +52,10 @@ const messages = {
             reset: '重置'
         },
         setting: {
-            dark: '暗色模式',
+            dark: '暗色預覽',
             brace: '大括號模式',
-            extra: '特殊字符'
+            extra: '特殊字元',
+            copyn: '複製時轉換\\n'
         }
     },
     'zh-hk': {
@@ -68,9 +71,10 @@ const messages = {
             reset: '重置'
         },
         setting: {
-            dark: '暗色模式',
+            dark: '暗色預覽',
             brace: '大括號模式',
-            extra: '特殊字符'
+            extra: '特殊字元',
+            copyn: '複製時轉換\\n'
         }
     },
     'zh-mo': {
@@ -86,27 +90,29 @@ const messages = {
             reset: '重置'
         },
         setting: {
-            dark: '暗色模式',
+            dark: '暗色預覽',
             brace: '大括號模式',
-            extra: '特殊字符'
+            extra: '特殊字元',
+            copyn: '複製時轉換\\n'
         }
     },
     ja: {
         placeholder: {
-            input: 'ここにテキストを入力してください。プレビューは下に表示されます',
-            output: 'ここにプレビューが表示されます'
+            "input": "原文をここに入力してください。下にプレビューされます",
+            "output": "プレビューはここに表示されます"
         },
         format: {
-            bold: '太字',
-            italic: '斜体',
-            underline: '下線',
-            strikethrough: '取り消し線',
-            reset: 'リセット'
+            bold: "太字",
+            italic: "斜体",
+            underline: "下線",
+            strikethrough: "取り消し線",
+            reset: "元に戻す"
         },
         setting: {
-            dark: 'ダークモード',
-            brace: 'ブレースモード',
-            extra: '特殊文字'
+            dark: "ダークモード",
+            brace: "ブレースモード",
+            extra: "特殊文字",
+            copyn: "コピー時に\\nを変換する"
         }
     },
     es: {
@@ -115,22 +121,23 @@ const messages = {
             output: 'Vista previa aquí'
         },
         format: {
-            bold: 'NEGRITA',
-            italic: 'CURSIVA',
-            underline: 'SUBRAYADO',
-            strikethrough: 'TACHADO',
-            reset: 'REINICIAR'
+            bold: 'NEGRITA ',
+            italic: 'CURSIVA ',
+            underline: 'SUBRAYADO ',
+            strikethrough: 'TACHADO ',
+            reset: 'REINICIAR '
         },
         setting: {
             dark: 'Modo oscuro',
             brace: 'Modo de llaves',
-            extra: 'Caracteres extra'
+            extra: 'Caracteres extra',
+            copyn: 'Copiar con \\n'
         }
     },
     pt: {
         placeholder: {
             input: 'Insira o seu texto aqui, a pré-visualização será mostrada abaixo',
-            output: 'Pré-visualização de formatos aqui'
+            output: 'Pré-visualização aqui'
         },
         format: {
             bold: 'NEGRITO ',
@@ -142,7 +149,8 @@ const messages = {
         setting: {
             dark: 'Modo Escuro',
             brace: 'Modo Brace',
-            extra: 'Caracteres Extra'
+            extra: 'Caracteres Extra',
+            copyn: 'Copiar com \\n'
         }
     }
 }
