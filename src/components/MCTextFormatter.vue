@@ -1,6 +1,9 @@
 <template>
     <div class="wrapper">
-        <textarea v-model="rawText" @input="formatText" :placeholder="$t('placeholder.input')" ref="textarea"></textarea>
+        <div class="textarea-container">
+            <textarea v-model="rawText" @input="formatText" :placeholder="$t('placeholder.input')" ref="textarea"></textarea>
+            <copy-button :raw-text="rawText" class="copy-button"></copy-button>
+        </div>
         <div>
             <format-button
                 v-for="(color, format) in colorsFormats"
@@ -74,10 +77,14 @@
 <script>
 import {computed, onMounted, ref, watch} from 'vue';
 import FormatButton from './FormatButton.vue';
+import CopyButton from "./CopyButton.vue";
 
 export default {
 
-    components: {FormatButton},
+    components: {
+        FormatButton,
+        CopyButton,
+    },
 
     setup() {
 
@@ -380,6 +387,17 @@ body {
     flex-direction: row;
     align-items: center;
     gap: 16px;
+}
+
+.textarea-container {
+    position: relative;
+}
+
+.copy-button {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    margin: 0;
 }
 
 textarea {
