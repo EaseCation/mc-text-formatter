@@ -298,10 +298,10 @@ export default {
                 }
             };
 
-            for (let i = 0; i < rawText.value.length; i++) {
-                if (rawText.value[i] === '§') {
+            for (let i = 0; i < formatted.length; i++) {
+                if (formatted[i] === '§') {
                     i++; // 跳过 '§'
-                    switch (rawText.value[i]) {
+                    switch (formatted[i]) {
                         case 'r':
                             newState = { color: "", bold: false, italic: false, underline: false, strikethrough: false };
                             break;
@@ -318,14 +318,14 @@ export default {
                             newState.strikethrough = true;
                             break;
                         default:
-                            newState.color = colors.value[`${colorCodeSymbol}${rawText.value[i]}`] || newState.color;
+                            newState.color = colors.value[`${colorCodeSymbol}${formatted[i]}`] || newState.color;
                             break;
                     }
-                } else if (rawText.value[i] === '\n') {
+                } else if (formatted[i] === '\n') {
                     applyStylesAndResetBuffer(); // 应用样式并清空缓冲
                     output += "<br>";
                 } else {
-                    contentBuffer += rawText.value[i]; // 加入当前字符到缓冲
+                    contentBuffer += formatted[i]; // 加入当前字符到缓冲
                 }
 
                 // 检查状态是否改变
