@@ -2,6 +2,7 @@ import { createI18n } from 'vue-i18n'
 
 const messages = {
     en: {
+        title: "Minecraft Text Formatter",
         placeholder: {
             input: 'Input your text here, the preview will be shown',
             output: 'Preview here'
@@ -21,6 +22,7 @@ const messages = {
         }
     },
     'zh-cn': {
+        title: "Minecraft 文本格式化工具",
         placeholder: {
             input: '输入原始文本，将实时预览',
             output: '将在此处预览'
@@ -40,6 +42,7 @@ const messages = {
         }
     },
     'zh-tw': {
+        title: "Minecraft 文本格式化工具",
         placeholder: {
             input: '在此輸入原始文本，預覽將顯示',
             output: '在此處預覽'
@@ -59,6 +62,7 @@ const messages = {
         }
     },
     'zh-hk': {
+        title: "Minecraft 文本格式化工具",
         placeholder: {
             input: '在此輸入原始文本，預覽將顯示',
             output: '在此處預覽'
@@ -78,6 +82,7 @@ const messages = {
         }
     },
     'zh-mo': {
+        title: "Minecraft 文本格式化工具",
         placeholder: {
             input: '在此輸入原始文本，預覽將顯示',
             output: '在此處預覽'
@@ -97,6 +102,7 @@ const messages = {
         }
     },
     ja: {
+        title: "マインクラフト テキストフォーマットツール",
         placeholder: {
             "input": "原文をここに入力してください。下にプレビューされます",
             "output": "プレビューはここに表示されます"
@@ -116,6 +122,7 @@ const messages = {
         }
     },
     es: {
+        title: "Herramienta de Formato de Texto para Minecraft",
         placeholder: {
             input: 'Introduce tu texto aquí, la vista previa se mostrará abajo',
             output: 'Vista previa aquí'
@@ -135,6 +142,7 @@ const messages = {
         }
     },
     pt: {
+        title: "Ferramenta de Formatação de Texto para Minecraft",
         placeholder: {
             input: 'Insira o seu texto aqui, a pré-visualização será mostrada abaixo',
             output: 'Pré-visualização aqui'
@@ -166,6 +174,7 @@ if (!Object.keys(messages).includes(systemLanguage)) {
 }
 
 const i18n = createI18n({
+    legacy: false,
     locale: systemLanguage,
     messages
 })

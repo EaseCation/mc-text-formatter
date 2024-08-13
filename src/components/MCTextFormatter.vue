@@ -84,78 +84,44 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import {computed, onMounted, ref, watch} from 'vue';
 import FormatButton from './FormatButton.vue';
 import CopyButton from "./CopyButton.vue";
+import {useI18n} from "vue-i18n";
 
-export default {
+const { t } = useI18n();
 
-    components: {
-        FormatButton,
-        CopyButton,
-    },
+onMounted(() => {
+    document.title = t('title');
+});
 
-    setup() {
+const braceMode = ref(false);
+const extraMode = ref(false);
+const copyWithN = ref(true);
 
-        const braceMode = ref(false);
-        const extraMode = ref(false);
-        const copyWithN = ref(true);
-
-        const colorsFormats = computed(() => {
-            if (braceMode.value) {
-                return {
-                    "{black}": "#000000",
-                    "{dark-blue}": "#0000AA",
-                    "{dark-green}": "#00AA00",
-                    "{dark-aqua}": "#00AAAA",
-                    "{dark-red}": "#AA0000",
-                    "{dark-purple}": "#AA00AA",
-                    "{gold}": "#FFAA00",
-                    "{gray}": "#AAAAAA",
-                    "{dark-gray}": "#555555",
-                    "{blue}": "#5555FF",
-                    "{green}": "#55FF55",
-                    "{aqua}": "#55FFFF",
-                    "{red}": "#FF5555",
-                    "{light-purple}": "#FF55FF",
-                    "{yellow}": "#FFFF55",
-                    "{white}": "#FFFFFF"
-                };
-            } else {
-                return {
-                    "§0": "#000000",
-                    "§1": "#0000AA",
-                    "§2": "#00AA00",
-                    "§3": "#00AAAA",
-                    "§4": "#AA0000",
-                    "§5": "#AA00AA",
-                    "§6": "#FFAA00",
-                    "§7": "#AAAAAA",
-                    "§8": "#555555",
-                    "§9": "#5555FF",
-                    "§a": "#55FF55",
-                    "§b": "#55FFFF",
-                    "§c": "#FF5555",
-                    "§d": "#FF55FF",
-                    "§e": "#FFFF55",
-                    "§f": "#FFFFFF",
-                    "§g": "#DDD605",
-                    "§h": "#E3D4D1",
-                    "§i": "#CECACA",
-                    "§j": "#443A3B",
-                    "§m": "#971607",
-                    "§n": "#B4684D",
-                    "§p": "#DEB12D",
-                    "§q": "#11A036",
-                    "§s": "#2CBAA8",
-                    "§t": "#21497B",
-                    "§u": "#9A5CC6"
-                };
-            }
-        })
-
-        const colors = ref({
+const colorsFormats = computed(() => {
+    if (braceMode.value) {
+        return {
+            "{black}": "#000000",
+            "{dark-blue}": "#0000AA",
+            "{dark-green}": "#00AA00",
+            "{dark-aqua}": "#00AAAA",
+            "{dark-red}": "#AA0000",
+            "{dark-purple}": "#AA00AA",
+            "{gold}": "#FFAA00",
+            "{gray}": "#AAAAAA",
+            "{dark-gray}": "#555555",
+            "{blue}": "#5555FF",
+            "{green}": "#55FF55",
+            "{aqua}": "#55FFFF",
+            "{red}": "#FF5555",
+            "{light-purple}": "#FF55FF",
+            "{yellow}": "#FFFF55",
+            "{white}": "#FFFFFF"
+        };
+    } else {
+        return {
             "§0": "#000000",
             "§1": "#0000AA",
             "§2": "#00AA00",
@@ -183,188 +149,201 @@ export default {
             "§s": "#2CBAA8",
             "§t": "#21497B",
             "§u": "#9A5CC6"
-        });
-
-        const colorsBrace = ref({
-            "{black}": "§0",
-            "{dark-blue}": "§1",
-            "{dark-green}": "§2",
-            "{dark-aqua}": "§3",
-            "{dark-red}": "§4",
-            "{dark-purple}": "§5",
-            "{gold}": "§6",
-            "{gray}": "§7",
-            "{dark-gray}": "§8",
-            "{blue}": "§9",
-            "{green}": "§a",
-            "{aqua}": "§b",
-            "{red}": "§c",
-            "{light-purple}": "§d",
-            "{pink}": "§d",
-            "{yellow}": "§e",
-            "{white}": "§f",
-            "{reset}": "§r",
-            "{bold}": "§l",
-            "{italic}": "§o",
-            "{enter}": "\n"
-        });
-
-        const extraChars = ref([
-            "༺",
-            "༻",
-            "❀",
-            "༽",
-            "༼",
-            "༒",
-            "■",
-            "ꕥ",
-            "»",
-            "«",
-            "୧",
-            "૭",
-            "✧",
-            "◎",
-            "★",
-            "✡",
-            "✩",
-            "❅",
-            "࿈",
-            "ʚ"
-        ])
-
-        const rawText = ref(localStorage.getItem('userRawText') || '');
-        const formattedText = ref('');
-        const isDarkMode = ref(JSON.parse(localStorage.getItem('isDarkMode')) || true);
-        const textarea = ref(null);
-
-        onMounted(() => {
-            if (rawText.value) {
-                formatText();
-            }
-        });
-
-        watch(rawText, (newText) => {
-            localStorage.setItem('userRawText', newText);
-        });
-
-        watch(isDarkMode, (newMode) => {
-            localStorage.setItem('isDarkMode', JSON.stringify(newMode));
-        });
-
-        const insertFormat = (format) => {
-            const start = textarea.value.selectionStart;
-            // const end = textarea.value.selectionEnd;
-
-            rawText.value = rawText.value.substring(0, start) + format + rawText.value.substring(start);
-
-            formatText();
-            textarea.value.focus();
-            // 延迟设置才能成功
-            setTimeout(() => {
-                textarea.value.setSelectionRange(start + format.length, start + format.length);
-            }, 0);
         };
-
-        const toggleDarkMode = () => {
-            // this.isDarkMode = !this.isDarkMode;
-        };
-
-        const colorCodeSymbol = '§';
-
-        const formatText = () => {
-            let formatted = rawText.value;
-            for (let braceCode in colorsBrace.value) {
-                const replacement = colorsBrace.value[braceCode];
-                const regex = new RegExp(braceCode.replace(/([^\w\s])/g, '\\$1'), "g");
-                formatted = formatted.replace(regex, replacement);
-            }
-
-            let state = {
-                color: "",
-                bold: false,
-                italic: false,
-                underline: false,
-                strikethrough: false,
-            };
-            let newState = { ...state };
-            let output = "";
-            let contentBuffer = "";
-
-            // 应用样式到缓冲内容，并重置缓冲
-            const applyStylesAndResetBuffer = () => {
-                if (contentBuffer) {
-                    let spanStart = `<span style="color: ${state.color};`;
-                    if (state.bold) spanStart += " font-weight: bold;";
-                    if (state.italic) spanStart += " font-style: italic;";
-                    if (state.underline) spanStart += " text-decoration: underline;";
-                    if (state.strikethrough) spanStart += " text-decoration: line-through;";
-                    spanStart += `">`;
-                    output += spanStart + contentBuffer + "</span>";
-                    contentBuffer = ""; // 重置内容缓冲
-                }
-            };
-
-            for (let i = 0; i < formatted.length; i++) {
-                if (formatted[i] === '§') {
-                    i++; // 跳过 '§'
-                    switch (formatted[i]) {
-                        case 'r':
-                            newState = { color: "", bold: false, italic: false, underline: false, strikethrough: false };
-                            break;
-                        case 'l':
-                            newState.bold = true;
-                            break;
-                        case 'o':
-                            newState.italic = true;
-                            break;
-                        case 'n':
-                            newState.underline = true;
-                            break;
-                        case 'm':
-                            newState.strikethrough = true;
-                            break;
-                        default:
-                            newState.color = colors.value[`${colorCodeSymbol}${formatted[i]}`] || newState.color;
-                            break;
-                    }
-                } else if (formatted[i] === '\n') {
-                    applyStylesAndResetBuffer(); // 应用样式并清空缓冲
-                    output += "<br>";
-                } else {
-                    contentBuffer += formatted[i]; // 加入当前字符到缓冲
-                }
-
-                // 检查状态是否改变
-                if (JSON.stringify(state) !== JSON.stringify(newState)) {
-                    applyStylesAndResetBuffer(); // 应用当前样式并重置缓冲
-                    state = { ...newState }; // 更新当前状态为新状态
-                }
-            }
-
-            applyStylesAndResetBuffer(); // 确保最后的缓冲内容被应用
-
-            formattedText.value = output;
-        };
-
-        return {
-            braceMode,
-            extraMode,
-            copyWithN,
-            colorsFormats,
-            colors,
-            colorsBrace,
-            extraChars,
-            rawText,
-            formattedText,
-            isDarkMode,
-            insertFormat,
-            toggleDarkMode,
-            formatText,
-            textarea,
-        };
-
     }
-}
+})
+
+const colors = ref({
+    "§0": "#000000",
+    "§1": "#0000AA",
+    "§2": "#00AA00",
+    "§3": "#00AAAA",
+    "§4": "#AA0000",
+    "§5": "#AA00AA",
+    "§6": "#FFAA00",
+    "§7": "#AAAAAA",
+    "§8": "#555555",
+    "§9": "#5555FF",
+    "§a": "#55FF55",
+    "§b": "#55FFFF",
+    "§c": "#FF5555",
+    "§d": "#FF55FF",
+    "§e": "#FFFF55",
+    "§f": "#FFFFFF",
+    "§g": "#DDD605",
+    "§h": "#E3D4D1",
+    "§i": "#CECACA",
+    "§j": "#443A3B",
+    "§m": "#971607",
+    "§n": "#B4684D",
+    "§p": "#DEB12D",
+    "§q": "#11A036",
+    "§s": "#2CBAA8",
+    "§t": "#21497B",
+    "§u": "#9A5CC6"
+});
+
+const colorsBrace = ref({
+    "{black}": "§0",
+    "{dark-blue}": "§1",
+    "{dark-green}": "§2",
+    "{dark-aqua}": "§3",
+    "{dark-red}": "§4",
+    "{dark-purple}": "§5",
+    "{gold}": "§6",
+    "{gray}": "§7",
+    "{dark-gray}": "§8",
+    "{blue}": "§9",
+    "{green}": "§a",
+    "{aqua}": "§b",
+    "{red}": "§c",
+    "{light-purple}": "§d",
+    "{pink}": "§d",
+    "{yellow}": "§e",
+    "{white}": "§f",
+    "{reset}": "§r",
+    "{bold}": "§l",
+    "{italic}": "§o",
+    "{enter}": "\n"
+});
+
+const extraChars = ref([
+    "༺",
+    "༻",
+    "❀",
+    "༽",
+    "༼",
+    "༒",
+    "■",
+    "ꕥ",
+    "»",
+    "«",
+    "୧",
+    "૭",
+    "✧",
+    "◎",
+    "★",
+    "✡",
+    "✩",
+    "❅",
+    "࿈",
+    "ʚ"
+])
+
+const rawText = ref(localStorage.getItem('userRawText') || '');
+const formattedText = ref('');
+const isDarkMode = ref(JSON.parse(localStorage.getItem('isDarkMode')) || true);
+const textarea = ref(null);
+
+onMounted(() => {
+    if (rawText.value) {
+        formatText();
+    }
+});
+
+watch(rawText, (newText) => {
+    localStorage.setItem('userRawText', newText);
+});
+
+watch(isDarkMode, (newMode) => {
+    localStorage.setItem('isDarkMode', JSON.stringify(newMode));
+});
+
+const insertFormat = (format) => {
+    const start = textarea.value.selectionStart;
+    // const end = textarea.value.selectionEnd;
+
+    rawText.value = rawText.value.substring(0, start) + format + rawText.value.substring(start);
+
+    formatText();
+    textarea.value.focus();
+    // 延迟设置才能成功
+    setTimeout(() => {
+        textarea.value.setSelectionRange(start + format.length, start + format.length);
+    }, 0);
+};
+
+const toggleDarkMode = () => {
+    // this.isDarkMode = !this.isDarkMode;
+};
+
+const colorCodeSymbol = '§';
+
+const formatText = () => {
+    let formatted = rawText.value;
+    for (let braceCode in colorsBrace.value) {
+        const replacement = colorsBrace.value[braceCode];
+        const regex = new RegExp(braceCode.replace(/([^\w\s])/g, '\\$1'), "g");
+        formatted = formatted.replace(regex, replacement);
+    }
+
+    let state = {
+        color: "",
+        bold: false,
+        italic: false,
+        underline: false,
+        strikethrough: false,
+    };
+    let newState = { ...state };
+    let output = "";
+    let contentBuffer = "";
+
+    // 应用样式到缓冲内容，并重置缓冲
+    const applyStylesAndResetBuffer = () => {
+        if (contentBuffer) {
+            let spanStart = `<span style="color: ${state.color};`;
+            if (state.bold) spanStart += " font-weight: bold;";
+            if (state.italic) spanStart += " font-style: italic;";
+            if (state.underline) spanStart += " text-decoration: underline;";
+            if (state.strikethrough) spanStart += " text-decoration: line-through;";
+            spanStart += `">`;
+            output += spanStart + contentBuffer + "</span>";
+            contentBuffer = ""; // 重置内容缓冲
+        }
+    };
+
+    for (let i = 0; i < formatted.length; i++) {
+        if (formatted[i] === '§') {
+            i++; // 跳过 '§'
+            switch (formatted[i]) {
+                case 'r':
+                    newState = { color: "", bold: false, italic: false, underline: false, strikethrough: false };
+                    break;
+                case 'l':
+                    newState.bold = true;
+                    break;
+                case 'o':
+                    newState.italic = true;
+                    break;
+                case 'n':
+                    newState.underline = true;
+                    break;
+                case 'm':
+                    newState.strikethrough = true;
+                    break;
+                default:
+                    newState.color = colors.value[`${colorCodeSymbol}${formatted[i]}`] || newState.color;
+                    break;
+            }
+        } else if (formatted[i] === '\n') {
+            applyStylesAndResetBuffer(); // 应用样式并清空缓冲
+            output += "<br>";
+        } else {
+            contentBuffer += formatted[i]; // 加入当前字符到缓冲
+        }
+
+        // 检查状态是否改变
+        if (JSON.stringify(state) !== JSON.stringify(newState)) {
+            applyStylesAndResetBuffer(); // 应用当前样式并重置缓冲
+            state = { ...newState }; // 更新当前状态为新状态
+        }
+    }
+
+    applyStylesAndResetBuffer(); // 确保最后的缓冲内容被应用
+
+    formattedText.value = output;
+};
+
 </script>
 
 <style>
