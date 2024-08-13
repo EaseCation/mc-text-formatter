@@ -1,51 +1,54 @@
 <template>
     <div class="wrapper">
-        <div class="textarea-container">
-            <textarea v-model="rawText" @input="formatText" :placeholder="$t('placeholder.input')" ref="textarea"></textarea>
-            <copy-button :raw-text="rawText" :copy-with-n="copyWithN" class="copy-button"></copy-button>
-        </div>
-        <div>
-            <format-button
-                v-for="(color, format) in colorsFormats"
-                v-bind:format="format"
-                v-bind:color="color"
-                v-bind:key="color"
-                @format="insertFormat"
-            >
-                {{ format }}
-            </format-button>
-            <format-button v-if="!braceMode" v-bind:format="'§l'" v-bind:bold="true" @format="insertFormat">
-                {{ $t('format.bold') }}§l
-            </format-button>
-            <format-button v-if="!braceMode" v-bind:format="'§o'" v-bind:italic="true" @format="insertFormat">
-                {{ $t('format.italic') }}§o
-            </format-button>
-            <format-button v-if="!braceMode" v-bind:format="'§n'" v-bind:underline="true" @format="insertFormat">
-                {{ $t('format.underline') }}§n
-            </format-button>
-            <format-button v-if="!braceMode" v-bind:format="'§m'" v-bind:strikethrough="true" @format="insertFormat">
-                {{ $t('format.strikethrough') }}§m
-            </format-button>
-            <format-button v-if="!braceMode" v-bind:format="'§r'" @format="insertFormat">
-                {{ $t('format.reset') }}§r
-            </format-button>
-            <format-button v-if="braceMode" v-bind:format="'{bold}'" v-bind:bold="true" @format="insertFormat">
-                {{ $t('format.bold') }}{bold}
-            </format-button>
-            <format-button v-if="braceMode" v-bind:format="'{italic}'" v-bind:italic="true" @format="insertFormat">
-                {{ $t('format.italic') }}{italic}
-            </format-button>
-            <format-button v-if="braceMode" v-bind:format="'{reset}'" @format="insertFormat">
-                {{ $t('format.reset') }}{reset}
-            </format-button>
-            <div v-if="extraMode">
-                <format-button v-for="char in extraChars" v-bind:key="char" v-bind:format="char" @format="insertFormat">
-                    {{ char }}
+        <div class="input">
+            <div class="textarea-container">
+                <textarea class="textarea" v-model="rawText" @input="formatText" :placeholder="$t('placeholder.input')" ref="textarea"></textarea>
+                <copy-button :raw-text="rawText" :copy-with-n="copyWithN" class="copy-button"></copy-button>
+            </div>
+            <div class="format-buttons">
+                <format-button
+                    v-for="(color, format) in colorsFormats"
+                    v-bind:format="format"
+                    v-bind:color="color"
+                    v-bind:key="color"
+                    @format="insertFormat"
+                >
+                    {{ format }}
                 </format-button>
+                <format-button v-if="!braceMode" v-bind:format="'§l'" v-bind:bold="true" @format="insertFormat">
+                    {{ $t('format.bold') }}§l
+                </format-button>
+                <format-button v-if="!braceMode" v-bind:format="'§o'" v-bind:italic="true" @format="insertFormat">
+                    {{ $t('format.italic') }}§o
+                </format-button>
+                <format-button v-if="!braceMode" v-bind:format="'§n'" v-bind:underline="true" @format="insertFormat">
+                    {{ $t('format.underline') }}§n
+                </format-button>
+                <format-button v-if="!braceMode" v-bind:format="'§m'" v-bind:strikethrough="true" @format="insertFormat">
+                    {{ $t('format.strikethrough') }}§m
+                </format-button>
+                <format-button v-if="!braceMode" v-bind:format="'§r'" @format="insertFormat">
+                    {{ $t('format.reset') }}§r
+                </format-button>
+                <format-button v-if="braceMode" v-bind:format="'{bold}'" v-bind:bold="true" @format="insertFormat">
+                    {{ $t('format.bold') }}{bold}
+                </format-button>
+                <format-button v-if="braceMode" v-bind:format="'{italic}'" v-bind:italic="true" @format="insertFormat">
+                    {{ $t('format.italic') }}{italic}
+                </format-button>
+                <format-button v-if="braceMode" v-bind:format="'{reset}'" @format="insertFormat">
+                    {{ $t('format.reset') }}{reset}
+                </format-button>
+                <div v-if="extraMode">
+                    <format-button v-for="char in extraChars" v-bind:key="char" v-bind:format="char" @format="insertFormat">
+                        {{ char }}
+                    </format-button>
+                </div>
             </div>
         </div>
         <div :class="['output', { 'dark-mode': isDarkMode }, { 'placeholder': !formattedText }]" v-html="formattedText ? formattedText : $t('placeholder.output')"></div>
     </div>
+    <!-- footer -->
     <div class="wrapper-bottom">
         <div class="settings">
             <label class="small-gray-text label-checkbox">
@@ -74,6 +77,9 @@
                 </svg>
                 EaseCation/mc-text-formatter
             </a>
+        </div>
+        <div class="bei-an">
+            <a href="https://beian.miit.gov.cn/" target="_blank">浙ICP备2022033471号-1</a>
         </div>
     </div>
 </template>
@@ -364,79 +370,92 @@ export default {
 <style>
 
 body {
-    background-color: #FAFAFA;
+    margin: 0;
+    background-color: #f9f9f9;
     font-family: -apple-system, BlinkMacSystemFont, /* MacOS & iOS 系统字体 */ "Segoe UI", /* Windows 系统字体 */ "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, /* 中文字体 */ sans-serif; /* 通用备选字体 */
 }
 
 /* 默认样式 */
 .wrapper {
-    max-width: 800px;
-    margin: 40px auto 32px;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    padding: 16px 32px 32px 32px;
+    height: 95vh;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex: 1;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.05);
     background-color: #ffffff;
     transition: background-color 0.3s ease;
 }
 
-.wrapper-bottom {
-    display: flex;
-    justify-content: center;
-    padding: 0;
-    flex-direction: column;
-    align-items: center;
-}
-
-.wrapper-bottom .settings {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
-}
-
 .textarea-container {
     position: relative;
+    flex: 100;
+}
+
+.textarea {
+    width: 100%;
+    /*height: 150px;*/
+    height: 100%;
+    padding: 16px 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    resize: none;
+    overflow: scroll;
+    box-sizing: border-box;
+    font-family: inherit;
 }
 
 .copy-button {
     position: absolute;
-    right: 4px;
-    top: 4px;
+    right: 12px;
+    top: 12px;
     margin: 0;
+    width: 32px;
+    height: 32px;
 }
 
-textarea {
-    width: 100%;
-    height: 150px;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    resize: vertical;
-    box-sizing: border-box;
+.format-buttons {
+    flex: 0;
+    display: flex;
+    gap: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
 }
 
 .output {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 4px;
-    border: 1px solid #eaeaea;
+    flex: 1;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.05);
+    padding: 32px;
+    border-radius: 16px;
     background-color: white;
     font-size: 16px;
-    line-height: 20px;
+    line-height: 1.5;
     word-break: break-all;
     overflow-wrap: break-word;
     white-space: pre-wrap;
     word-wrap: break-word;
     hyphens: auto;
     transition: background-color 0.3s ease;
+    overflow: scroll;
 }
 
 .output.dark-mode {
-    background-color: #333;
+    background-color: rgba(0, 0, 0, 0.82);
     color: #fff;
-    border-color: #666;
 }
 
 .placeholder {
@@ -448,7 +467,6 @@ textarea {
 }
 
 button {
-    margin-top: 10px;
     padding: 5px 10px;
     border: none;
     border-radius: 4px;
@@ -476,12 +494,29 @@ button:hover {
     margin-left: 2px;
 }
 
+.wrapper-bottom {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin-bottom: 24px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wrapper-bottom .settings {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+}
+
 .github-link {
     margin-top: 20px;
     text-align: center;
 }
 
-.github-link a {
+a {
     color: rgba(0, 0, 0, 0.45);
     text-decoration: none;
     font-size: 12px;
@@ -496,7 +531,7 @@ button:hover {
     margin-right: 4px;
 }
 
-.github-link a:hover {
+a:hover {
     color: rgba(0, 0, 0, .85)
 }
 
@@ -504,24 +539,67 @@ button:hover {
     fill: rgba(0, 0, 0, 0.85);
 }
 
+.bei-an {
+    margin-top: 16px;
+}
+
+/* 手机适配 */
+@media (max-width: 1200px) {
+    .wrapper {
+        flex-direction: column;
+        height: auto;
+        padding: 24px;
+    }
+
+    .input {
+        gap: 16px;
+    }
+
+    .textarea-container {
+        position: relative;
+        flex: 100;
+    }
+
+    .textarea {
+        height: 150px;
+        resize: vertical;
+        padding: 12px 16px;
+    }
+
+    .output {
+        padding: 24px;
+    }
+}
+
+@media (max-width: 800px) {
+    .wrapper {
+        padding: 12px;
+        gap: 16px;
+    }
+}
+
 /* 暗黑模式 */
 @media (prefers-color-scheme: dark) {
     body {
         color: #fff;
-        background-color: #222;
+        background-color: #000;
     }
 
-    .wrapper {
-        background-color: #444;
+    .input {
+        background-color: #141414;
     }
 
-    textarea {
-        background-color: #555;
+    .textarea {
+        background-color: transparent;
         color: #fff;
-        border-color: #666;
+        border-color: rgb(66, 66, 66);
     }
 
-    .github-link a {
+    .output.dark-mode {
+        background-color: #141414;
+    }
+
+    a {
         color: rgba(255, 255, 255, 0.45);
     }
 
@@ -529,22 +607,12 @@ button:hover {
         fill: rgba(255, 255, 255, 0.45);
     }
 
-    .github-link a:hover {
+    a:hover {
         color: rgba(255, 255, 255, .85)
     }
 
     .github-link a:hover svg {
         fill: rgba(255, 255, 255, 0.85);
-    }
-}
-
-/* 手机适配 */
-@media (max-width: 768px) {
-    .wrapper {
-        margin: 4px;
-    }
-    .wrapper-bottom {
-        padding: 8px 0 0;
     }
 }
 

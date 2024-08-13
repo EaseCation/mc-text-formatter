@@ -3,7 +3,7 @@ import { createI18n } from 'vue-i18n'
 const messages = {
     en: {
         placeholder: {
-            input: 'Input your text here, the preview will be shown below',
+            input: 'Input your text here, the preview will be shown',
             output: 'Preview here'
         },
         format: {
@@ -22,7 +22,7 @@ const messages = {
     },
     'zh-cn': {
         placeholder: {
-            input: '输入原始文本，将在下方实时预览',
+            input: '输入原始文本，将实时预览',
             output: '将在此处预览'
         },
         format: {
@@ -41,7 +41,7 @@ const messages = {
     },
     'zh-tw': {
         placeholder: {
-            input: '在此輸入原始文本，預覽將在下方顯示',
+            input: '在此輸入原始文本，預覽將顯示',
             output: '在此處預覽'
         },
         format: {
@@ -60,7 +60,7 @@ const messages = {
     },
     'zh-hk': {
         placeholder: {
-            input: '在此輸入原始文本，預覽將在下方顯示',
+            input: '在此輸入原始文本，預覽將顯示',
             output: '在此處預覽'
         },
         format: {
@@ -79,7 +79,7 @@ const messages = {
     },
     'zh-mo': {
         placeholder: {
-            input: '在此輸入原始文本，預覽將在下方顯示',
+            input: '在此輸入原始文本，預覽將顯示',
             output: '在此處預覽'
         },
         format: {

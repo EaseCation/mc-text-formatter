@@ -51,23 +51,32 @@ export default {
 
 <style>
 .format-button {
-    padding: 4px 8px;
+    padding: 6px 8px;
     color: white;
-    margin: 6px 6px 0 0;
-    font-size: 14px;
+    border-radius: 8px;
+    font-size: 16px;
     line-height: 20px;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); 
+    box-shadow: inset 0 0 0 2px rgba(128, 128, 128, 0.1);
     transition: all 0.2s;  
-    min-width: 40px;
+    min-width: 50px;
 }
 
 .format-button:hover {
     filter: brightness(1.1);
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15); 
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
 .format-button:active {
     filter: brightness(0.95);
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15); 
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 800px) {
+    .format-button {
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 14px;
+        min-width: 40px;
+    }
 }
 </style>
