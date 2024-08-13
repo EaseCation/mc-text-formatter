@@ -39,7 +39,7 @@
                 <format-button v-if="braceMode" v-bind:format="'{reset}'" @format="insertFormat">
                     {{ $t('format.reset') }}{reset}
                 </format-button>
-                <div v-if="extraMode">
+                <div class="format-buttons-extra" v-if="extraMode">
                     <format-button v-for="char in extraChars" v-bind:key="char" v-bind:format="char" @format="insertFormat">
                         {{ char }}
                     </format-button>
@@ -436,6 +436,15 @@ body {
     align-content: flex-start;
 }
 
+.format-buttons-extra {
+    display: flex;
+    gap: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
 .output {
     flex: 1;
     box-shadow: 0 4px 32px rgba(0, 0, 0, 0.05);
@@ -577,6 +586,12 @@ a:hover {
     .wrapper {
         padding: 12px;
         gap: 16px;
+    }
+    .format-buttons {
+        gap: 6px;
+    }
+    .format-buttons-extra {
+        gap: 6px;
     }
 }
 
