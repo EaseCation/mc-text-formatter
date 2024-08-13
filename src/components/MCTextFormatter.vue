@@ -451,6 +451,8 @@ body {
     hyphens: auto;
     transition: background-color 0.3s ease;
     overflow: scroll;
+    /* 如果客户端装了这个字体则会正确显示 */
+    font-family: Minecraft AE, -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 .output.dark-mode {
