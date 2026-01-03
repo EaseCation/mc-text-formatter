@@ -45,29 +45,35 @@
                     </format-button>
                 </div>
             </div>
+            <!-- 设置选项 -->
+            <div class="settings">
+                <label class="small-gray-text label-checkbox">
+                    <input type="checkbox" v-model="isDarkMode" @change="toggleDarkMode">
+                    <span class="label-checkbox-text">{{ $t('setting.dark') }}</span>
+                </label>
+                <label class="small-gray-text label-checkbox">
+                    <input type="checkbox" v-model="braceMode">
+                    <span class="label-checkbox-text">{{ $t('setting.brace') }}</span>
+                </label>
+                <label class="small-gray-text label-checkbox">
+                    <input type="checkbox" v-model="extraMode">
+                    <span class="label-checkbox-text">{{ $t('setting.extra') }}</span>
+                </label>
+                <label class="small-gray-text label-checkbox">
+                    <input type="checkbox" v-model="copyWithN">
+                    <span class="label-checkbox-text">{{ $t('setting.copyn') }}</span>
+                </label>
+                <button class="copy-html-button" @click="copyHtmlToClipboard" :disabled="!formattedText">
+                    {{ copyButtonText || $t('html.copyHtml') }}
+                </button>
+            </div>
         </div>
-        <div :class="['output', { 'dark-mode': isDarkMode }, { 'placeholder': !formattedText }]" v-html="formattedText ? formattedText : $t('placeholder.output')"></div>
+        <div class="output-container">
+            <div :class="['output', { 'dark-mode': isDarkMode }, { 'placeholder': !formattedText }]" v-html="formattedText ? formattedText : $t('placeholder.output')"></div>
+        </div>
     </div>
     <!-- footer -->
     <div class="wrapper-bottom">
-        <div class="settings">
-            <label class="small-gray-text label-checkbox">
-                <input type="checkbox" v-model="isDarkMode" @change="toggleDarkMode">
-                <span class="label-checkbox-text">{{ $t('setting.dark') }}</span>
-            </label>
-            <label class="small-gray-text label-checkbox">
-                <input type="checkbox" v-model="braceMode">
-                <span class="label-checkbox-text">{{ $t('setting.brace') }}</span>
-            </label>
-            <label class="small-gray-text label-checkbox">
-                <input type="checkbox" v-model="extraMode">
-                <span class="label-checkbox-text">{{ $t('setting.extra') }}</span>
-            </label>
-            <label class="small-gray-text label-checkbox">
-                <input type="checkbox" v-model="copyWithN">
-                <span class="label-checkbox-text">{{ $t('setting.copyn') }}</span>
-            </label>
-        </div>
         <div class="github-link">
             <a href="https://github.com/EaseCation/mc-text-formatter" target="_blank">
                 <svg width="12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
@@ -99,6 +105,7 @@ onMounted(() => {
 const braceMode = ref(false);
 const extraMode = ref(false);
 const copyWithN = ref(true);
+const copyButtonText = ref('');
 
 const colorsFormats = computed(() => {
     if (braceMode.value) {
@@ -267,6 +274,25 @@ const toggleDarkMode = () => {
     // this.isDarkMode = !this.isDarkMode;
 };
 
+const copyHtmlToClipboard = () => {
+    if (formattedText.value) {
+        const originalText = copyButtonText.value || t('html.copyHtml');
+        navigator.clipboard.writeText(formattedText.value)
+            .then(() => {
+                copyButtonText.value = t('html.copySuccess');
+                setTimeout(() => {
+                    copyButtonText.value = originalText;
+                }, 2000);
+            })
+            .catch(() => {
+                copyButtonText.value = t('html.copyFailed');
+                setTimeout(() => {
+                    copyButtonText.value = originalText;
+                }, 2000);
+            });
+    }
+};
+
 const colorCodeSymbol = '§';
 
 const formatText = () => {
@@ -424,6 +450,13 @@ body {
     align-content: flex-start;
 }
 
+.output-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
 .output {
     flex: 1;
     box-shadow: 0 4px 32px rgba(0, 0, 0, 0.05);
@@ -493,6 +526,14 @@ button:hover {
     align-items: center;
 }
 
+.input .settings {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+}
+
 .wrapper-bottom .settings {
     display: flex;
     justify-content: center;
@@ -531,6 +572,32 @@ a:hover {
 
 .bei-an {
     margin-top: 16px;
+}
+
+/* 复制 HTML 按钮样式 */
+.copy-html-button {
+    padding: 4px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+    background-color: transparent;
+    color: #888;
+    border: 1px solid #888;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 8px;
+}
+
+.copy-html-button:hover:not(:disabled) {
+    background-color: #888;
+    color: #fff;
+}
+
+.copy-html-button:disabled {
+    background-color: transparent;
+    border-color: #d9d9d9;
+    color: #d9d9d9;
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 /* 手机适配 */

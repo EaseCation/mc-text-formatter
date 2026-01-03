@@ -19,6 +19,12 @@ const messages = {
             brace: 'Brace Mode',
             extra: 'Additional Chars',
             copyn: 'Copy with \\n'
+        },
+        html: {
+            source: 'HTML Source',
+            copyHtml: 'Copy HTML',
+            copySuccess: 'HTML copied to clipboard!',
+            copyFailed: 'Copy failed, please copy manually'
         }
     },
     'zh-cn': {
@@ -39,6 +45,12 @@ const messages = {
             brace: '大括号模式',
             extra: '特殊字符',
             copyn: '复制时转换\\n'
+        },
+        html: {
+            source: 'HTML 源码',
+            copyHtml: '复制 HTML',
+            copySuccess: 'HTML 已复制到剪贴板！',
+            copyFailed: '复制失败，请手动复制'
         }
     },
     'zh-tw': {
@@ -59,6 +71,12 @@ const messages = {
             brace: '大括號模式',
             extra: '特殊字元',
             copyn: '複製時轉換\\n'
+        },
+        html: {
+            source: 'HTML 源碼',
+            copyHtml: '複製 HTML',
+            copySuccess: 'HTML 已複製到剪貼簿！',
+            copyFailed: '複製失敗，請手動複製'
         }
     },
     'zh-hk': {
@@ -79,6 +97,12 @@ const messages = {
             brace: '大括號模式',
             extra: '特殊字元',
             copyn: '複製時轉換\\n'
+        },
+        html: {
+            source: 'HTML 源碼',
+            copyHtml: '複製 HTML',
+            copySuccess: 'HTML 已複製到剪貼簿！',
+            copyFailed: '複製失敗，請手動複製'
         }
     },
     'zh-mo': {
@@ -99,6 +123,12 @@ const messages = {
             brace: '大括號模式',
             extra: '特殊字元',
             copyn: '複製時轉換\\n'
+        },
+        html: {
+            source: 'HTML 源碼',
+            copyHtml: '複製 HTML',
+            copySuccess: 'HTML 已複製到剪貼簿！',
+            copyFailed: '複製失敗，請手動複製'
         }
     },
     ja: {
@@ -119,6 +149,12 @@ const messages = {
             brace: "ブレースモード",
             extra: "特殊文字",
             copyn: "コピー時に\\nを変換する"
+        },
+        html: {
+            source: 'HTML ソース',
+            copyHtml: 'HTML をコピー',
+            copySuccess: 'HTML をクリップボードにコピーしました！',
+            copyFailed: 'コピーに失敗しました。手動でコピーしてください'
         }
     },
     es: {
@@ -139,6 +175,12 @@ const messages = {
             brace: 'Modo de llaves',
             extra: 'Caracteres extra',
             copyn: 'Copiar con \\n'
+        },
+        html: {
+            source: 'Fuente HTML',
+            copyHtml: 'Copiar HTML',
+            copySuccess: '¡HTML copiado al portapapeles!',
+            copyFailed: 'Error al copiar, por favor copie manualmente'
         }
     },
     pt: {
@@ -159,6 +201,12 @@ const messages = {
             brace: 'Modo Brace',
             extra: 'Caracteres Extra',
             copyn: 'Copiar com \\n'
+        },
+        html: {
+            source: 'Fonte HTML',
+            copyHtml: 'Copiar HTML',
+            copySuccess: 'HTML copiado para a área de transferência!',
+            copyFailed: 'Falha ao copiar, por favor copie manualmente'
         }
     }
 }
